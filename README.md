@@ -1,0 +1,32 @@
+# BA Blocked Area
+
+A RuneLite plugin for Barbarian Assault. After a wave you're sent back to the lobby and the wave-complete interface opens. Part of that interface stops your clicks from reaching the scene behind it. This plugin draws an outline around exactly that part, so you know where you can and can't click the scene.
+
+## Config
+
+| Option | Default | Description |
+| --- | --- | --- |
+| Outline color | red | Color of the outline |
+| Outline width | 2 | Width of the outline, in pixels |
+| Fill color | transparent | Optional fill for the blocked area |
+
+## How the blocked area is computed
+
+The outline doesn't come from hand-measured coordinates. It comes from the same rule the game client uses to block mouse input, which was read from the decompiled client (1.12.39). Each frame, the client walks the widget tree depth first. When it reaches the viewport widget (content type 1337), it adds the scene's menu entries ("Walk here", NPC and object options). Any widget it processes after that and that contains the mouse resets the menu to just "Cancel", throwing those scene entries away. Two kinds of widget do this:
+
+| Blocker | Area blocked |
+| --- | --- |
+| if3 widget with `noClickThrough` | the widget's bounds clipped to its ancestors' |
+| layer mounting an interface with modal mode `MODAL_NOCLICKTHROUGH` | the layer's bounds clipped to its ancestors' |
+
+Widgets that merely have ops or listeners don't block: their menu entries go on top of the scene's, but the scene entries stay. The client also skips some widgets, and their whole subtrees, entirely. An if3 widget is skipped if it is self-hidden, or if it is not a layer, has no listener, and has zero click and op masks. `BlockedAreaCalculator` repeats this walk. It collects the blockers that belong to the wave-complete interface (group 497), including the layer that mounts it, then intersects the result with the viewport.
+
+## Development
+
+Build and test with JDK 11:
+
+```sh
+./gradlew build
+```
+
+To launch a development client with the plugin loaded, run `BABlockedAreaPluginTest.main` from `src/test`.
