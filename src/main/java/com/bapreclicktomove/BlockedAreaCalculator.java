@@ -3,6 +3,7 @@ package com.bapreclicktomove;
 import java.awt.Rectangle;
 import java.awt.geom.Area;
 import java.util.function.IntPredicate;
+import lombok.Value;
 import net.runelite.api.Client;
 import net.runelite.api.WidgetNode;
 import net.runelite.api.widgets.Widget;
@@ -23,6 +24,10 @@ import net.runelite.api.widgets.WidgetType;
  *     layer's clipped bounds.</li>
  * </ul>
  * Widgets with ops or listeners do not block: they add their own entries above the scene's but leave them in place.
+ * <p>
+ * The same resets also discard the queued mouse-wheel events, so the viewport's zoom does not happen over these
+ * widgets either. Scrolling is additionally blocked by if3 widgets with {@code noScrollThrough}, which discard just
+ * the mouse-wheel events.
  */
 class BlockedAreaCalculator
 {
@@ -33,7 +38,17 @@ class BlockedAreaCalculator
 	private final IntPredicate countsInterface;
 
 	private Rectangle viewport;
-	private Area blocked;
+	private Area clickBlocked;
+	private Area scrollBlocked;
+
+	@Value
+	static class Result
+	{
+		/** Where the mouse cannot interact with the scene (hover, click, menu entries). */
+		Area clickBlocked;
+		/** Where mouse-wheel events do not reach the viewport; always contains {@link #clickBlocked}. */
+		Area scrollBlocked;
+	}
 
 	/**
 	 * @param countsInterface which interface (group) ids may contribute to the blocked area; blockers belonging to
@@ -46,12 +61,13 @@ class BlockedAreaCalculator
 	}
 
 	/**
-	 * @return the blocked part of the viewport, or an empty area if nothing blocks it or there is no viewport
+	 * @return the blocked parts of the viewport, empty if nothing blocks it or there is no viewport
 	 */
-	Area compute()
+	Result compute()
 	{
 		viewport = null;
-		blocked = new Area();
+		clickBlocked = new Area();
+		scrollBlocked = new Area();
 
 		Widget[] roots = client.getWidgetRoots();
 		if (roots != null)
@@ -61,10 +77,12 @@ class BlockedAreaCalculator
 
 		if (viewport == null)
 		{
-			return new Area();
+			return new Result(new Area(), new Area());
 		}
-		blocked.intersect(new Area(viewport));
-		return blocked;
+		Area view = new Area(viewport);
+		clickBlocked.intersect(view);
+		scrollBlocked.intersect(view);
+		return new Result(clickBlocked, scrollBlocked);
 	}
 
 	private void visit(Widget[] widgets, Rectangle parentClip)
@@ -99,6 +117,13 @@ class BlockedAreaCalculator
 		{
 			block(clip, w.getId());
 		}
+		else if (w.isIf3() && w.getNoScrollThrough())
+		{
+			if (counts(clip, w.getId()))
+			{
+				scrollBlocked.add(new Area(clip));
+			}
+		}
 
 		Widget[] children = w.getStaticChildren();
 		if (children != null)
@@ -128,11 +153,18 @@ class BlockedAreaCalculator
 
 	private void block(Rectangle clip, int componentId)
 	{
-		// Blockers processed before the viewport only discard entries that come before the scene's.
-		if (viewport != null && !clip.isEmpty() && countsInterface.test(componentId >>> 16))
+		if (counts(clip, componentId))
 		{
-			blocked.add(new Area(clip));
+			Area area = new Area(clip);
+			clickBlocked.add(area);
+			scrollBlocked.add(area);
 		}
+	}
+
+	private boolean counts(Rectangle clip, int componentId)
+	{
+		// Blockers processed before the viewport only discard entries and events that come before the scene's.
+		return viewport != null && !clip.isEmpty() && countsInterface.test(componentId >>> 16);
 	}
 
 	/**

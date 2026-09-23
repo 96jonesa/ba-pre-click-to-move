@@ -68,6 +68,12 @@ class BlockedAreaCalculatorTest
 		return w;
 	}
 
+	private static Widget noScrollThrough(Widget w)
+	{
+		when(w.getNoScrollThrough()).thenReturn(true);
+		return w;
+	}
+
 	private void mount(Widget layer, int group, int modalMode, Widget... roots)
 	{
 		WidgetNode node = mock(WidgetNode.class);
@@ -110,7 +116,7 @@ class BlockedAreaCalculatorTest
 			Rectangle box = new Rectangle(100, 100, 50, 50);
 			roots(viewport(view), noClickThrough(layer(TARGET, 3, box)));
 
-			assertArea(calculator.compute(), box);
+			assertArea(calculator.compute().getClickBlocked(), box);
 		}
 
 		@Test
@@ -118,7 +124,7 @@ class BlockedAreaCalculatorTest
 		{
 			roots(noClickThrough(layer(TARGET, 3, new Rectangle(100, 100, 50, 50))), viewport(view));
 
-			assertTrue(calculator.compute().isEmpty());
+			assertTrue(calculator.compute().getClickBlocked().isEmpty());
 		}
 
 		@Test
@@ -126,7 +132,7 @@ class BlockedAreaCalculatorTest
 		{
 			roots(noClickThrough(layer(TARGET, 3, new Rectangle(100, 100, 50, 50))));
 
-			assertTrue(calculator.compute().isEmpty());
+			assertTrue(calculator.compute().getClickBlocked().isEmpty());
 		}
 
 		@Test
@@ -137,7 +143,7 @@ class BlockedAreaCalculatorTest
 			Widget parent = layer(TARGET, 3, new Rectangle(100, 0, 400, 600), child);
 			roots(viewport(view), parent);
 
-			assertArea(calculator.compute(), new Rectangle(100, 350, 150, 50));
+			assertArea(calculator.compute().getClickBlocked(), new Rectangle(100, 350, 150, 50));
 		}
 
 		@Test
@@ -148,7 +154,7 @@ class BlockedAreaCalculatorTest
 			mount(mountLayer, TARGET, WidgetModalMode.MODAL_NOCLICKTHROUGH, layer(TARGET, 0, slot));
 			roots(viewport(view), mountLayer);
 
-			assertArea(calculator.compute(), slot);
+			assertArea(calculator.compute().getClickBlocked(), slot);
 		}
 
 		@Test
@@ -159,7 +165,7 @@ class BlockedAreaCalculatorTest
 			mount(mountLayer, TARGET, WidgetModalMode.MODAL_CLICKTHROUGH, layer(TARGET, 0, slot));
 			roots(viewport(view), mountLayer);
 
-			assertTrue(calculator.compute().isEmpty());
+			assertTrue(calculator.compute().getClickBlocked().isEmpty());
 		}
 
 		@Test
@@ -171,7 +177,7 @@ class BlockedAreaCalculatorTest
 				layer(TARGET, 0, new Rectangle(20, 20, 300, 200), noClickThrough(layer(TARGET, 7, box))));
 			roots(viewport(view), mountLayer);
 
-			assertArea(calculator.compute(), box);
+			assertArea(calculator.compute().getClickBlocked(), box);
 		}
 
 		@Test
@@ -179,7 +185,7 @@ class BlockedAreaCalculatorTest
 		{
 			roots(viewport(view), noClickThrough(layer(OTHER, 3, new Rectangle(100, 100, 50, 50))));
 
-			assertTrue(calculator.compute().isEmpty());
+			assertTrue(calculator.compute().getClickBlocked().isEmpty());
 		}
 
 		@Test
@@ -189,7 +195,7 @@ class BlockedAreaCalculatorTest
 			Rectangle b = new Rectangle(25, 25, 50, 50);
 			roots(viewport(view), noClickThrough(layer(TARGET, 3, a)), noClickThrough(layer(TARGET, 4, b)));
 
-			assertArea(calculator.compute(), a, b);
+			assertArea(calculator.compute().getClickBlocked(), a, b);
 		}
 
 		@Test
@@ -200,7 +206,7 @@ class BlockedAreaCalculatorTest
 			when(sprite.getType()).thenReturn(WidgetType.GRAPHIC);
 			roots(viewport(view), sprite);
 
-			assertTrue(calculator.compute().isEmpty());
+			assertTrue(calculator.compute().getClickBlocked().isEmpty());
 		}
 
 		@Test
@@ -213,7 +219,7 @@ class BlockedAreaCalculatorTest
 			when(sprite.hasListener()).thenReturn(true);
 			roots(viewport(view), sprite);
 
-			assertArea(calculator.compute(), box);
+			assertArea(calculator.compute().getClickBlocked(), box);
 		}
 
 		@Test
@@ -224,7 +230,7 @@ class BlockedAreaCalculatorTest
 			when(parent.isSelfHidden()).thenReturn(true);
 			roots(viewport(view), parent);
 
-			assertTrue(calculator.compute().isEmpty());
+			assertTrue(calculator.compute().getClickBlocked().isEmpty());
 		}
 
 		@Test
@@ -235,7 +241,62 @@ class BlockedAreaCalculatorTest
 			when(button.getActions()).thenReturn(new String[]{"Close"});
 			roots(viewport(view), button);
 
-			assertTrue(calculator.compute().isEmpty());
+			assertTrue(calculator.compute().getClickBlocked().isEmpty());
+		}
+
+		@Test
+		void clickBlockersAlsoBlockScroll()
+		{
+			Rectangle box = new Rectangle(100, 100, 50, 50);
+			roots(viewport(view), noClickThrough(layer(TARGET, 3, box)));
+
+			assertArea(calculator.compute().getScrollBlocked(), box);
+		}
+
+		@Test
+		void modalMountAlsoBlocksScroll()
+		{
+			Rectangle slot = new Rectangle(20, 20, 300, 200);
+			Widget mountLayer = layer(TOPLEVEL, 5, slot);
+			mount(mountLayer, TARGET, WidgetModalMode.MODAL_NOCLICKTHROUGH, layer(TARGET, 0, slot));
+			roots(viewport(view), mountLayer);
+
+			assertArea(calculator.compute().getScrollBlocked(), slot);
+		}
+
+		@Test
+		void noScrollThroughBlocksOnlyScroll()
+		{
+			Rectangle box = new Rectangle(100, 100, 50, 50);
+			roots(viewport(view), noScrollThrough(layer(TARGET, 3, box)));
+
+			BlockedAreaCalculator.Result result = calculator.compute();
+			assertTrue(result.getClickBlocked().isEmpty());
+			assertArea(result.getScrollBlocked(), box);
+		}
+
+		@Test
+		void noScrollThroughBeforeViewportDoesNotBlock()
+		{
+			roots(noScrollThrough(layer(TARGET, 3, new Rectangle(100, 100, 50, 50))), viewport(view));
+
+			assertTrue(calculator.compute().getScrollBlocked().isEmpty());
+		}
+
+		@Test
+		void noScrollThroughInOtherInterfacesIsLeftOut()
+		{
+			roots(viewport(view), noScrollThrough(layer(OTHER, 3, new Rectangle(100, 100, 50, 50))));
+
+			assertTrue(calculator.compute().getScrollBlocked().isEmpty());
+		}
+
+		@Test
+		void scrollBlockedIsClippedToViewport()
+		{
+			roots(viewport(view), noScrollThrough(layer(TARGET, 3, new Rectangle(450, 350, 100, 100))));
+
+			assertArea(calculator.compute().getScrollBlocked(), new Rectangle(450, 350, 50, 50));
 		}
 	}
 }
