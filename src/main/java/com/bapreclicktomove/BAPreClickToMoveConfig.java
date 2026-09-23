@@ -39,13 +39,26 @@ public interface BAPreClickToMoveConfig extends Config
 		return false;
 	}
 
+	@ConfigItem(
+		keyName = "scrollToZoom",
+		name = "Scroll to zoom over interface",
+		description = "Zoom the camera when scrolling over the part of the wave-complete interface that blocks the scene."
+			+ " Needs the game's scroll-to-zoom setting on",
+		section = pointsInterfaceBoundarySection,
+		position = 1
+	)
+	default boolean scrollToZoom()
+	{
+		return false;
+	}
+
 	@Alpha
 	@ConfigItem(
 		keyName = "outlineColor",
 		name = "Outline color",
 		description = "Color of the outline drawn along the points interface boundary",
 		section = pointsInterfaceBoundarySection,
-		position = 1
+		position = 2
 	)
 	default Color outlineColor()
 	{
@@ -58,7 +71,7 @@ public interface BAPreClickToMoveConfig extends Config
 		name = "Outline width",
 		description = "Width of the outline, in pixels",
 		section = pointsInterfaceBoundarySection,
-		position = 2
+		position = 3
 	)
 	default int outlineWidth()
 	{
@@ -71,7 +84,7 @@ public interface BAPreClickToMoveConfig extends Config
 		name = "Fill color",
 		description = "Color used to fill the area inside the points interface boundary (fully transparent by default)",
 		section = pointsInterfaceBoundarySection,
-		position = 3
+		position = 4
 	)
 	default Color fillColor()
 	{

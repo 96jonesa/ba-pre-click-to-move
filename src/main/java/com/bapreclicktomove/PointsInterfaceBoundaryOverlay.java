@@ -35,7 +35,7 @@ class PointsInterfaceBoundaryOverlay extends Overlay
 			return null;
 		}
 
-		Area blocked = calculator.compute();
+		Area blocked = calculator.compute().getClickBlocked();
 		if (blocked.isEmpty())
 		{
 			return null;
