@@ -1,30 +1,30 @@
-package com.bablockedarea;
+package com.bapreclicktomove;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-class EastWestTest
+class NorthSouthTest
 {
 	@Nested
 	class TestOffset
 	{
 		@Test
-		void eastIsPositive()
+		void northIsPositive()
 		{
-			assertEquals(3, EastWest.EAST.offset(3));
+			assertEquals(3, NorthSouth.NORTH.offset(3));
 		}
 
 		@Test
-		void westIsNegative()
+		void southIsNegative()
 		{
-			assertEquals(-3, EastWest.WEST.offset(3));
+			assertEquals(-3, NorthSouth.SOUTH.offset(3));
 		}
 
 		@Test
 		void zeroTilesIsNoOffset()
 		{
-			assertEquals(0, EastWest.WEST.offset(0));
+			assertEquals(0, NorthSouth.SOUTH.offset(0));
 		}
 	}
 }

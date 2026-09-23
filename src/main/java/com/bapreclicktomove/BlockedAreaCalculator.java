@@ -1,4 +1,4 @@
-package com.bablockedarea;
+package com.bapreclicktomove;
 
 import java.awt.Rectangle;
 import java.awt.geom.Area;

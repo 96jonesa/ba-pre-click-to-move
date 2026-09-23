@@ -1,4 +1,4 @@
-package com.bablockedarea;
+package com.bapreclicktomove;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -28,10 +28,10 @@ class RelativeTileOverlay extends Overlay
 	private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
 
 	private final Client client;
-	private final BABlockedAreaConfig config;
+	private final BAPreClickToMoveConfig config;
 
 	@Inject
-	RelativeTileOverlay(Client client, BABlockedAreaConfig config)
+	RelativeTileOverlay(Client client, BAPreClickToMoveConfig config)
 	{
 		this.client = client;
 		this.config = config;

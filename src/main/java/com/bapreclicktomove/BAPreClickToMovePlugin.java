@@ -1,4 +1,4 @@
-package com.bablockedarea;
+package com.bapreclicktomove;
 
 import com.google.inject.Provides;
 import javax.inject.Inject;
@@ -8,17 +8,17 @@ import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
 
 @PluginDescriptor(
-	name = "BA Blocked Area",
+	name = "BA Pre-Click to Move",
 	description = "Barbarian Assault lobby helpers: outline the interface area that blocks scene clicks, and a tile relative to the player",
 	tags = {"barbarian", "assault", "ba", "minigame", "interface", "overlay"}
 )
-public class BABlockedAreaPlugin extends Plugin
+public class BAPreClickToMovePlugin extends Plugin
 {
 	@Inject
 	private OverlayManager overlayManager;
 
 	@Inject
-	private BABlockedAreaOverlay overlay;
+	private PointsInterfaceBoundaryOverlay overlay;
 
 	@Inject
 	private RelativeTileOverlay relativeTileOverlay;
@@ -38,8 +38,8 @@ public class BABlockedAreaPlugin extends Plugin
 	}
 
 	@Provides
-	BABlockedAreaConfig provideConfig(ConfigManager configManager)
+	BAPreClickToMoveConfig provideConfig(ConfigManager configManager)
 	{
-		return configManager.getConfig(BABlockedAreaConfig.class);
+		return configManager.getConfig(BAPreClickToMoveConfig.class);
 	}
 }

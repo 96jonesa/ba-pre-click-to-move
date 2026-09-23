@@ -1,4 +1,4 @@
-package com.bablockedarea;
+package com.bapreclicktomove;
 
 import java.awt.Color;
 import net.runelite.client.config.Alpha;
@@ -8,17 +8,17 @@ import net.runelite.client.config.ConfigItem;
 import net.runelite.client.config.ConfigSection;
 import net.runelite.client.config.Range;
 
-@ConfigGroup(BABlockedAreaConfig.GROUP)
-public interface BABlockedAreaConfig extends Config
+@ConfigGroup(BAPreClickToMoveConfig.GROUP)
+public interface BAPreClickToMoveConfig extends Config
 {
-	String GROUP = "bablockedarea";
+	String GROUP = "bapreclicktomove";
 
 	@ConfigSection(
-		name = "Blocked area",
+		name = "Points interface boundary",
 		description = "Outline of the part of the wave-complete interface that blocks clicks on the scene",
 		position = 0
 	)
-	String blockedAreaSection = "blockedArea";
+	String pointsInterfaceBoundarySection = "pointsInterfaceBoundary";
 
 	@ConfigSection(
 		name = "Relative tile",
@@ -28,13 +28,13 @@ public interface BABlockedAreaConfig extends Config
 	String relativeTileSection = "relativeTile";
 
 	@ConfigItem(
-		keyName = "showBlockedArea",
-		name = "Show blocked area",
+		keyName = "showPointsInterfaceBoundary",
+		name = "Show points interface boundary",
 		description = "Outline the part of the wave-complete interface that blocks clicks on the scene behind it",
-		section = blockedAreaSection,
+		section = pointsInterfaceBoundarySection,
 		position = 0
 	)
-	default boolean showBlockedArea()
+	default boolean showPointsInterfaceBoundary()
 	{
 		return false;
 	}
@@ -43,8 +43,8 @@ public interface BABlockedAreaConfig extends Config
 	@ConfigItem(
 		keyName = "outlineColor",
 		name = "Outline color",
-		description = "Color of the outline drawn around the blocked area",
-		section = blockedAreaSection,
+		description = "Color of the outline drawn along the points interface boundary",
+		section = pointsInterfaceBoundarySection,
 		position = 1
 	)
 	default Color outlineColor()
@@ -57,7 +57,7 @@ public interface BABlockedAreaConfig extends Config
 		keyName = "outlineWidth",
 		name = "Outline width",
 		description = "Width of the outline, in pixels",
-		section = blockedAreaSection,
+		section = pointsInterfaceBoundarySection,
 		position = 2
 	)
 	default int outlineWidth()
@@ -69,8 +69,8 @@ public interface BABlockedAreaConfig extends Config
 	@ConfigItem(
 		keyName = "fillColor",
 		name = "Fill color",
-		description = "Color used to fill the blocked area (fully transparent by default)",
-		section = blockedAreaSection,
+		description = "Color used to fill the area inside the points interface boundary (fully transparent by default)",
+		section = pointsInterfaceBoundarySection,
 		position = 3
 	)
 	default Color fillColor()

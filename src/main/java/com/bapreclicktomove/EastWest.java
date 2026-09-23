@@ -1,4 +1,4 @@
-package com.bablockedarea;
+package com.bapreclicktomove;
 
 import lombok.RequiredArgsConstructor;
 

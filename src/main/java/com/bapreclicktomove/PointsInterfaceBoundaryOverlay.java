@@ -1,4 +1,4 @@
-package com.bablockedarea;
+package com.bapreclicktomove;
 
 import java.awt.BasicStroke;
 import java.awt.Dimension;
@@ -11,14 +11,14 @@ import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
 
-class BABlockedAreaOverlay extends Overlay
+class PointsInterfaceBoundaryOverlay extends Overlay
 {
 	private final Client client;
-	private final BABlockedAreaConfig config;
+	private final BAPreClickToMoveConfig config;
 	private final BlockedAreaCalculator calculator;
 
 	@Inject
-	BABlockedAreaOverlay(Client client, BABlockedAreaConfig config)
+	PointsInterfaceBoundaryOverlay(Client client, BAPreClickToMoveConfig config)
 	{
 		this.client = client;
 		this.config = config;
@@ -30,7 +30,7 @@ class BABlockedAreaOverlay extends Overlay
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
-		if (!config.showBlockedArea() || client.getWidget(InterfaceID.BARBASSAULT_WAVECOMPLETE, 0) == null)
+		if (!config.showPointsInterfaceBoundary() || client.getWidget(InterfaceID.BARBASSAULT_WAVECOMPLETE, 0) == null)
 		{
 			return null;
 		}
