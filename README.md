@@ -1,14 +1,22 @@
 # BA Blocked Area
 
-A RuneLite plugin for Barbarian Assault. After a wave you're sent back to the lobby and the wave-complete interface opens. Part of that interface stops your clicks from reaching the scene behind it. This plugin draws an outline around exactly that part, so you know where you can and can't click the scene.
+A RuneLite plugin with two helpers for the Barbarian Assault lobby, each off by default and turned on with its own checkbox.
+
+- **Blocked area.** After a wave you're sent back to the lobby and the wave-complete interface opens. Part of that interface stops your clicks from reaching the scene behind it. This helper outlines exactly that part.
+- **Relative tile.** In the lobby (the basement under the Barbarian Outpost, map region 10322; not the wave arena), this helper outlines the tile at a fixed offset from your tile, e.g. 2 North 3 East. It is drawn above interfaces, so the wave-complete interface can't hide it. It follows your true (server) tile, so it steps from tile to tile instead of sliding while you walk.
 
 ## Config
 
-| Option | Default | Description |
-| --- | --- | --- |
-| Outline color | red | Color of the outline |
-| Outline width | 2 | Width of the outline, in pixels |
-| Fill color | transparent | Optional fill for the blocked area |
+| Section | Option | Default | Description |
+| --- | --- | --- | --- |
+| Blocked area | Show blocked area | off | Turns the blocked-area outline on |
+| Blocked area | Outline color | red | Color of the outline |
+| Blocked area | Outline width | 2 | Width of the outline, in pixels |
+| Blocked area | Fill color | transparent | Optional fill for the blocked area |
+| Relative tile | Show relative tile | off | Turns the relative-tile outline on |
+| Relative tile | Tiles north/south + North/South | 0, North | Number of tiles north or south of the player |
+| Relative tile | Tiles east/west + East/West | 0, East | Number of tiles east or west of the player |
+| Relative tile | Tile color | cyan | Color of the tile outline |
 
 ## How the blocked area is computed
 

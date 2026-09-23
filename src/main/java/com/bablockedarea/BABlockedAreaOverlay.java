@@ -30,7 +30,7 @@ class BABlockedAreaOverlay extends Overlay
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
-		if (client.getWidget(InterfaceID.BARBASSAULT_WAVECOMPLETE, 0) == null)
+		if (!config.showBlockedArea() || client.getWidget(InterfaceID.BARBASSAULT_WAVECOMPLETE, 0) == null)
 		{
 			return null;
 		}

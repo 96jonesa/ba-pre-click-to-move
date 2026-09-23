@@ -9,7 +9,7 @@ import net.runelite.client.ui.overlay.OverlayManager;
 
 @PluginDescriptor(
 	name = "BA Blocked Area",
-	description = "Outlines the part of the Barbarian Assault wave-complete interface that blocks clicks on the scene behind it",
+	description = "Barbarian Assault lobby helpers: outline the interface area that blocks scene clicks, and a tile relative to the player",
 	tags = {"barbarian", "assault", "ba", "minigame", "interface", "overlay"}
 )
 public class BABlockedAreaPlugin extends Plugin
@@ -20,16 +20,21 @@ public class BABlockedAreaPlugin extends Plugin
 	@Inject
 	private BABlockedAreaOverlay overlay;
 
+	@Inject
+	private RelativeTileOverlay relativeTileOverlay;
+
 	@Override
 	protected void startUp()
 	{
 		overlayManager.add(overlay);
+		overlayManager.add(relativeTileOverlay);
 	}
 
 	@Override
 	protected void shutDown()
 	{
 		overlayManager.remove(overlay);
+		overlayManager.remove(relativeTileOverlay);
 	}
 
 	@Provides
