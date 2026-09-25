@@ -3,7 +3,6 @@ package com.bapreclicktomove;
 import com.google.inject.Provides;
 import javax.inject.Inject;
 import net.runelite.client.config.ConfigManager;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.input.MouseManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
@@ -31,19 +30,12 @@ public class BAPreClickToMovePlugin extends Plugin
 	@Inject
 	private InterfaceScrollToZoom interfaceScrollToZoom;
 
-	@Inject
-	private EventBus eventBus;
-
-	@Inject
-	private WaveTracker waveTracker;
-
 	@Override
 	protected void startUp()
 	{
 		overlayManager.add(overlay);
 		overlayManager.add(relativeTileOverlay);
 		mouseManager.registerMouseWheelListener(interfaceScrollToZoom);
-		eventBus.register(waveTracker);
 	}
 
 	@Override
@@ -52,8 +44,6 @@ public class BAPreClickToMovePlugin extends Plugin
 		overlayManager.remove(overlay);
 		overlayManager.remove(relativeTileOverlay);
 		mouseManager.unregisterMouseWheelListener(interfaceScrollToZoom);
-		eventBus.unregister(waveTracker);
-		waveTracker.reset();
 	}
 
 	@Provides

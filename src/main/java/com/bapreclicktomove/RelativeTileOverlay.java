@@ -10,6 +10,7 @@ import net.runelite.api.Client;
 import net.runelite.api.Perspective;
 import net.runelite.api.Player;
 import net.runelite.api.coords.LocalPoint;
+import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
@@ -25,18 +26,23 @@ class RelativeTileOverlay extends Overlay
 	/** The underground lobby with the waiting rooms, below the Barbarian Outpost. */
 	static final int LOBBY_REGION_ID = 10322;
 
+	/**
+	 * The room within the lobby that players wait in before wave 10, corners inclusive: north-west (2584, 5278) and
+	 * south-east (2591, 5271). Players are placed here as soon as wave 9 is won, so being in it is what marks the
+	 * wave 10 lobby.
+	 */
+	static final WorldArea WAVE_10_LOBBY = new WorldArea(2584, 5271, 8, 8, 0);
+
 	private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
 
 	private final Client client;
 	private final BAPreClickToMoveConfig config;
-	private final WaveTracker waveTracker;
 
 	@Inject
-	RelativeTileOverlay(Client client, BAPreClickToMoveConfig config, WaveTracker waveTracker)
+	RelativeTileOverlay(Client client, BAPreClickToMoveConfig config)
 	{
 		this.client = client;
 		this.config = config;
-		this.waveTracker = waveTracker;
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.ABOVE_WIDGETS);
 		setPriority(PRIORITY_HIGHEST);
@@ -64,7 +70,7 @@ class RelativeTileOverlay extends Overlay
 		}
 
 		WorldPoint target;
-		if (config.wave10Offset() && waveTracker.getNextWave() == 10)
+		if (config.wave10Offset() && isWave10Lobby(playerTile))
 		{
 			target = playerTile
 				.dx(config.wave10EastWest().offset(config.wave10EastWestTiles()))
@@ -88,5 +94,10 @@ class RelativeTileOverlay extends Overlay
 			OverlayUtil.renderPolygon(graphics, poly, config.tileColor(), TRANSPARENT, new BasicStroke(2));
 		}
 		return null;
+	}
+
+	static boolean isWave10Lobby(WorldPoint tile)
+	{
+		return WAVE_10_LOBBY.contains(tile);
 	}
 }

@@ -5,7 +5,7 @@ A RuneLite plugin with helpers for the Barbarian Assault lobby, each off by defa
 - **Points interface boundary.** After a wave you're sent back to the lobby and the wave-complete interface opens. Part of that interface stops your clicks from reaching the scene behind it. This helper outlines exactly that part.
 - **Scroll to zoom over the interface.** Scrolling over that same blocking part normally does nothing, because it swallows mouse-wheel events as well as clicks. With this on, scrolling there zooms the camera, just as it does over the scene. It uses the game's own zoom script and follows the game's scroll-to-zoom setting: when that setting is off, this does nothing either.
 - **Relative tile.** In the lobby (the basement under the Barbarian Outpost, map region 10322; not the wave arena), this helper outlines the tile at a fixed offset from your tile, e.g. 2 North 3 East. It is drawn above interfaces, so the wave-complete interface can't hide it. It follows your true (server) tile, so it steps from tile to tile instead of sliding while you walk.
-- **Different offset on wave 10.** On wave 10 the dispensers sit in different places relative to each role's spawn than on waves 1–9. With this on, the lobby before wave 10 uses a separate offset. The plugin works out which wave the lobby is for from the game's `---- Wave: N ----` message and the wave-complete interface. After you win wave N, the lobby is for wave N+1; if you fail it, the lobby is for wave N again. If you enable the plugin, or log in, partway through a game, it uses the normal offset until the next wave starts.
+- **Different offset on wave 10.** On wave 10 the dispensers sit in different places relative to each role's spawn than on waves 1–9. With this on, the relative tile uses a separate offset while you're in the wave 10 lobby: the room you're put in after winning wave 9 (tiles x 2584–2591, y 5271–5278, plane 0). The room is recognised from your true tile, so the wave 10 offset applies from the first tick there.
 
 ## Config
 
@@ -20,7 +20,7 @@ A RuneLite plugin with helpers for the Barbarian Assault lobby, each off by defa
 | Relative tile | Tiles north/south + North/South | 0, North | Number of tiles north or south of the player |
 | Relative tile | Tiles east/west + East/West | 0, East | Number of tiles east or west of the player |
 | Relative tile | Tile color | cyan | Color of the tile outline |
-| Relative tile | Different offset on wave 10 | off | Use the wave 10 offset below in the lobby before wave 10 |
+| Relative tile | Different offset on wave 10 | off | Use the wave 10 offset below in the wave 10 lobby |
 | Relative tile | Wave 10 tiles north/south + Wave 10 North/South | 0, North | Wave 10 offset north or south of the player |
 | Relative tile | Wave 10 tiles east/west + Wave 10 East/West | 0, East | Wave 10 offset east or west of the player |
 

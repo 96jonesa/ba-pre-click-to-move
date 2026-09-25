@@ -169,7 +169,7 @@ public interface BAPreClickToMoveConfig extends Config
 	@ConfigItem(
 		keyName = "wave10Offset",
 		name = "Different offset on wave 10",
-		description = "In the lobby before wave 10, outline the tile at the wave 10 offset below instead."
+		description = "In the wave 10 lobby, outline the tile at the wave 10 offset below instead."
 			+ " The dispensers are placed differently relative to the spawns on wave 10",
 		section = relativeTileSection,
 		position = 6
@@ -183,7 +183,7 @@ public interface BAPreClickToMoveConfig extends Config
 	@ConfigItem(
 		keyName = "wave10NorthSouthTiles",
 		name = "Wave 10 tiles north/south",
-		description = "How many tiles north or south of the player the tile is before wave 10",
+		description = "How many tiles north or south of the player the tile is in the wave 10 lobby",
 		section = relativeTileSection,
 		position = 7
 	)
@@ -195,7 +195,7 @@ public interface BAPreClickToMoveConfig extends Config
 	@ConfigItem(
 		keyName = "wave10NorthSouth",
 		name = "Wave 10 North/South",
-		description = "Whether the tile is north or south of the player before wave 10",
+		description = "Whether the tile is north or south of the player in the wave 10 lobby",
 		section = relativeTileSection,
 		position = 8
 	)
@@ -208,7 +208,7 @@ public interface BAPreClickToMoveConfig extends Config
 	@ConfigItem(
 		keyName = "wave10EastWestTiles",
 		name = "Wave 10 tiles east/west",
-		description = "How many tiles east or west of the player the tile is before wave 10",
+		description = "How many tiles east or west of the player the tile is in the wave 10 lobby",
 		section = relativeTileSection,
 		position = 9
 	)
@@ -220,7 +220,7 @@ public interface BAPreClickToMoveConfig extends Config
 	@ConfigItem(
 		keyName = "wave10EastWest",
 		name = "Wave 10 East/West",
-		description = "Whether the tile is east or west of the player before wave 10",
+		description = "Whether the tile is east or west of the player in the wave 10 lobby",
 		section = relativeTileSection,
 		position = 10
 	)
