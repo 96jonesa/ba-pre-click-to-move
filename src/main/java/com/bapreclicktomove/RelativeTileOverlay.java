@@ -29,12 +29,14 @@ class RelativeTileOverlay extends Overlay
 
 	private final Client client;
 	private final BAPreClickToMoveConfig config;
+	private final WaveTracker waveTracker;
 
 	@Inject
-	RelativeTileOverlay(Client client, BAPreClickToMoveConfig config)
+	RelativeTileOverlay(Client client, BAPreClickToMoveConfig config, WaveTracker waveTracker)
 	{
 		this.client = client;
 		this.config = config;
+		this.waveTracker = waveTracker;
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.ABOVE_WIDGETS);
 		setPriority(PRIORITY_HIGHEST);
@@ -61,9 +63,19 @@ class RelativeTileOverlay extends Overlay
 			return null;
 		}
 
-		WorldPoint target = playerTile
-			.dx(config.eastWest().offset(config.eastWestTiles()))
-			.dy(config.northSouth().offset(config.northSouthTiles()));
+		WorldPoint target;
+		if (config.wave10Offset() && waveTracker.getNextWave() == 10)
+		{
+			target = playerTile
+				.dx(config.wave10EastWest().offset(config.wave10EastWestTiles()))
+				.dy(config.wave10NorthSouth().offset(config.wave10NorthSouthTiles()));
+		}
+		else
+		{
+			target = playerTile
+				.dx(config.eastWest().offset(config.eastWestTiles()))
+				.dy(config.northSouth().offset(config.northSouthTiles()));
+		}
 		LocalPoint tile = LocalPoint.fromWorld(player.getWorldView(), target);
 		if (tile == null)
 		{
