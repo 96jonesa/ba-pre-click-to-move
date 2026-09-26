@@ -22,7 +22,7 @@ public interface BAPreClickToMoveConfig extends Config
 
 	@ConfigSection(
 		name = "Relative tile",
-		description = "Outline of a tile at a fixed offset from the player, while in the lobby",
+		description = "Outline of a tile at a fixed offset from the player, while in a wave lobby",
 		position = 1
 	)
 	String relativeTileSection = "relativeTile";
@@ -94,7 +94,7 @@ public interface BAPreClickToMoveConfig extends Config
 	@ConfigItem(
 		keyName = "showRelativeTile",
 		name = "Show relative tile",
-		description = "In the Barbarian Assault lobby, outline the tile at the offset below from the player",
+		description = "While in a Barbarian Assault wave lobby, outline the tile at the offset below from the player",
 		section = relativeTileSection,
 		position = 0
 	)
@@ -164,5 +164,68 @@ public interface BAPreClickToMoveConfig extends Config
 	default Color tileColor()
 	{
 		return Color.CYAN;
+	}
+
+	@ConfigItem(
+		keyName = "wave10Offset",
+		name = "Different offset on wave 10",
+		description = "In the wave 10 lobby, outline the tile at the wave 10 offset below instead."
+			+ " The dispensers are placed differently relative to the spawns on wave 10",
+		section = relativeTileSection,
+		position = 6
+	)
+	default boolean wave10Offset()
+	{
+		return false;
+	}
+
+	@Range(min = 0)
+	@ConfigItem(
+		keyName = "wave10NorthSouthTiles",
+		name = "Wave 10 tiles north/south",
+		description = "How many tiles north or south of the player the tile is in the wave 10 lobby",
+		section = relativeTileSection,
+		position = 7
+	)
+	default int wave10NorthSouthTiles()
+	{
+		return 0;
+	}
+
+	@ConfigItem(
+		keyName = "wave10NorthSouth",
+		name = "Wave 10 North/South",
+		description = "Whether the tile is north or south of the player in the wave 10 lobby",
+		section = relativeTileSection,
+		position = 8
+	)
+	default NorthSouth wave10NorthSouth()
+	{
+		return NorthSouth.NORTH;
+	}
+
+	@Range(min = 0)
+	@ConfigItem(
+		keyName = "wave10EastWestTiles",
+		name = "Wave 10 tiles east/west",
+		description = "How many tiles east or west of the player the tile is in the wave 10 lobby",
+		section = relativeTileSection,
+		position = 9
+	)
+	default int wave10EastWestTiles()
+	{
+		return 0;
+	}
+
+	@ConfigItem(
+		keyName = "wave10EastWest",
+		name = "Wave 10 East/West",
+		description = "Whether the tile is east or west of the player in the wave 10 lobby",
+		section = relativeTileSection,
+		position = 10
+	)
+	default EastWest wave10EastWest()
+	{
+		return EastWest.EAST;
 	}
 }
