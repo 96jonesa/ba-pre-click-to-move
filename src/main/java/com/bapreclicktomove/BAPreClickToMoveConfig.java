@@ -22,7 +22,7 @@ public interface BAPreClickToMoveConfig extends Config
 
 	@ConfigSection(
 		name = "Relative tile",
-		description = "Outline of a tile at a fixed offset from the player, while in the lobby",
+		description = "Outline of a tile at a fixed offset from the player, while in a wave lobby",
 		position = 1
 	)
 	String relativeTileSection = "relativeTile";
@@ -94,7 +94,7 @@ public interface BAPreClickToMoveConfig extends Config
 	@ConfigItem(
 		keyName = "showRelativeTile",
 		name = "Show relative tile",
-		description = "In the Barbarian Assault lobby, outline the tile at the offset below from the player",
+		description = "While in a Barbarian Assault wave lobby, outline the tile at the offset below from the player",
 		section = relativeTileSection,
 		position = 0
 	)
